@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"os"
+	"time"
 
 	"chuan/internal/services"
 )
@@ -104,4 +106,73 @@ func (h *Handler) GetRoomStatusHandler(w http.ResponseWriter, r *http.Request) {
 	// 获取房间状态
 	status := h.webrtcService.GetRoomStatus(code)
 	json.NewEncoder(w).Encode(status)
+}
+
+const AuthCookieName = "auth_token"
+
+// ConfigHandler 返回认证配置
+func (h *Handler) ConfigHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	allowCode := os.Getenv("ALLOW_CODE")
+	response := map[string]interface{}{
+		"auth_enabled": allowCode != "",
+	}
+	json.NewEncoder(w).Encode(response)
+}
+
+// LoginHandler 处理登录请求
+func (h *Handler) LoginHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "方法不允许", http.StatusMethodNotAllowed)
+		return
+	}
+
+	var req struct {
+		Code string `json:"code"`
+	}
+
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "无效的请求", http.StatusBadRequest)
+		return
+	}
+
+	allowCode := os.Getenv("ALLOW_CODE")
+	if allowCode != "" && req.Code == allowCode {
+		// 登录成功，设置 cookie
+		expiration := time.Now().Add(24 * time.Hour)
+		cookie := http.Cookie{
+			Name:     AuthCookieName,
+			Value:    "authenticated",
+			Expires:  expiration,
+			Path:     "/",
+			HttpOnly: true,
+			SameSite: http.SameSiteLaxMode,
+		}
+		http.SetCookie(w, &cookie)
+		w.WriteHeader(http.StatusOK)
+		json.NewEncoder(w).Encode(map[string]interface{}{"success": true})
+		return
+	}
+
+	// 登录失败
+	w.WriteHeader(http.StatusUnauthorized)
+	json.NewEncoder(w).Encode(map[string]interface{}{"success": false, "message": "无效的访问码"})
+}
+
+// CheckAuthHandler 检查认证状态
+func (h *Handler) CheckAuthHandler(w http.ResponseWriter, r *http.Request) {
+	allowCode := os.Getenv("ALLOW_CODE")
+	if allowCode == "" {
+		json.NewEncoder(w).Encode(map[string]interface{}{"authenticated": true})
+		return
+	}
+
+	cookie, err := r.Cookie(AuthCookieName)
+	if err != nil || cookie.Value != "authenticated" {
+		w.WriteHeader(http.StatusUnauthorized)
+		json.NewEncoder(w).Encode(map[string]interface{}{"authenticated": false})
+		return
+	}
+
+	json.NewEncoder(w).Encode(map[string]interface{}{"authenticated": true})
 }

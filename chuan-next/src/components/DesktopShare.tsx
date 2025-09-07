@@ -107,10 +107,7 @@ export default function DesktopShare({
           message: '当前浏览器不支持 getDisplayMedia API，请使用支持屏幕分享的现代浏览器（如 Chrome、Firefox、Edge 等）。'
         };
       case 'insecure-context':
-        return {
-          title: '需要安全上下文',
-          message: '屏幕分享功能需要在安全上下文中使用（HTTPS协议或localhost），当前环境不支持。'
-        };
+        return null; // 根据要求，不显示此警告
       case 'detection-failed':
         return {
           title: '检测屏幕分享支持失败',

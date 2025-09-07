@@ -113,6 +113,27 @@ export class ClientAPI {
   async getWebRTCRoomStatus(code: string): Promise<ApiResponse> {
     return this.get(`/api/webrtc-room-status?code=${code}`);
   }
+
+  /**
+   * 获取服务器配置
+   */
+  async getConfig(): Promise<ApiResponse> {
+    return this.get('/api/config');
+  }
+
+  /**
+   * 登录
+   */
+  async login(code: string): Promise<ApiResponse> {
+    return this.post('/api/login', { code });
+  }
+
+  /**
+   * 检查认证状态
+   */
+  async checkAuth(): Promise<ApiResponse> {
+    return this.get('/api/check-auth');
+  }
 }
 
 // 导出单例实例

@@ -66,6 +66,11 @@ func main() {
 	r.Get("/api/room-info", h.WebRTCRoomStatusHandler)
 	r.Get("/api/webrtc-room-status", h.WebRTCRoomStatusHandler)
 
+	// 认证API
+	r.Get("/api/config", h.ConfigHandler)
+	r.Post("/api/login", h.LoginHandler)
+	r.Get("/api/check-auth", h.CheckAuthHandler)
+
 	// 构建服务器地址
 	addr := fmt.Sprintf(":%d", *port)
 

@@ -1,8 +1,7 @@
-"use client";
+'use client';
 
 import React from 'react';
-import { Github, HelpCircle } from 'lucide-react';
-import Link from 'next/link';
+import { Globe, Music } from 'lucide-react';
 
 export default function Hero() {
   return (
@@ -16,35 +15,26 @@ export default function Hero() {
         <span className="text-xs sm:text-sm text-slate-500">基于WebRTC的端到端服务 - 无需注册，即传即用</span>
       </p>
       
-      {/* GitHub开源链接和帮助 */}
+      {/* Links */}
       <div className="flex items-center justify-center gap-2 mb-4">
         <a 
-          href="https://github.com/MatrixSeven/file-transfer-go" 
+          href="https://news.789168.xyz" 
           target="_blank" 
           rel="noopener noreferrer"
           className="inline-flex items-center gap-1 px-3 py-1.5 text-xs sm:text-sm text-slate-600 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 rounded-full transition-colors duration-200 border border-slate-200 hover:border-slate-300"
         >
-          <Github className="w-3 h-3 sm:w-4 sm:h-4" />
-          <span className="font-medium">开源项目</span>
+          <Globe className="w-3 h-3 sm:w-4 sm:h-4" />
+          <span className="font-medium">看会新闻</span>
         </a>
         
-        <Link 
-          href="/help"
-          className="inline-flex items-center gap-1 px-3 py-1.5 text-xs sm:text-sm text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 rounded-full transition-colors duration-200 border border-blue-200 hover:border-blue-300"
-        >
-          <HelpCircle className="w-3 h-3 sm:w-4 sm:h-4" />
-          <span className="font-medium">使用帮助</span>
-        </Link>
-      </div>
-      
-      <div className="flex items-center justify-center">
         <a 
-          href="https://github.com/MatrixSeven/file-transfer-go"
-          target="_blank" 
+          href="https://music.789168.xyz"
+          target="_blank"
           rel="noopener noreferrer"
-          className="text-xs text-slate-500 hover:text-slate-700 hover:underline transition-colors duration-200"
+          className="inline-flex items-center gap-1 px-3 py-1.5 text-xs sm:text-sm text-green-600 hover:text-green-800 bg-green-50 hover:bg-green-100 rounded-full transition-colors duration-200 border border-green-200 hover:border-green-300"
         >
-          https://github.com/MatrixSeven/file-transfer-go
+          <Music className="w-3 h-3 sm:w-4 sm:h-4" />
+          <span className="font-medium">听会音乐</span>
         </a>
       </div>
       
